@@ -2,9 +2,6 @@
 #include<GLFW/glfw3.h>
 
 #include <cstdio>
-
-
-
 #include <iostream>
 
 static const char* vsSrc = R"GLSL(
@@ -32,11 +29,17 @@ static GLuint compileShader(GLenum type, const char* src){
     return s;
 }
 	void framebuffer_size_callback(GLFWwindow* window, int width , int height);
+	
 	void framebuffer_size_callback(GLFWwindow* window, int width , int height)
 	{
 		glViewport(0,0,width,height);
 	}
 	
+void processInput(GLFWwindow *window)
+{
+	if(glfwGetKey(window,GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+}
 
 int main()
 {
@@ -61,7 +64,7 @@ int main()
 		return -1;
 	}
 	
-	glViewport(50,50,800,600); //sets up the window size and starting coordinates.
+	glViewport(0,0,800,600); //sets up the window size and starting coordinates.
 	
 	glfwSetFramebufferSizeCallback(window,framebuffer_size_callback);//recursive call to call the function on every window resize
 	
@@ -69,6 +72,14 @@ int main()
 	
 	while(!glfwWindowShouldClose(window))
 	{
+		//input
+		processInput(window);
+		
+		//rendering commands here...
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		
+		//Check and call events and swap the buffers
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
